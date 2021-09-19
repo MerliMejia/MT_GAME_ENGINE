@@ -1,3 +1,9 @@
+GameEngine/RawModel.java
+ GameEngine.RawModel
+GameEngine/Renderer.java
+ GameEngine.Renderer
+GameEngine/Loader.java
+ GameEngine.Loader
 GameEngine/Game.java
  GameEngine.Game
 Test.java
