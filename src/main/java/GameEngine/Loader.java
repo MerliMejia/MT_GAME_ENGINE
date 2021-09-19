@@ -3,6 +3,7 @@ package GameEngine;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +16,15 @@ public class Loader {
     private List<Integer> vaos = new ArrayList<>();
     private List<Integer> vbos = new ArrayList<>();
 
-    public RawModel loadToVAO(float[] positions){
+    public RawModel loadToVAO(float[] positions, int[] indices){
         int vaoID = createVAO();
+        bindIndicesBuffer(indices);
         //For now on the number 0 just because.
         storeDataInAttributeList(0, positions);
         unbindVAO();
 
         //Is divided by 3 because a triangle have 3 vertex;
-        return new RawModel(vaoID, positions.length / 3);
+        return new RawModel(vaoID, indices.length);
     }
 
     public void cleanUp(){
@@ -55,6 +57,21 @@ public class Loader {
 
     private void unbindVAO(){
         glBindVertexArray(0);
+    }
+
+    private void bindIndicesBuffer(int[] indices){
+        int vboID = glGenBuffers();
+        vbos.add(vboID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
+        IntBuffer buffer = storeDataInIntBuffer(indices);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+    }
+
+    private IntBuffer storeDataInIntBuffer(int[] data){
+        IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+        buffer.put(data);
+        buffer.flip();
+        return buffer;
     }
 
     private FloatBuffer storeDataInFloatBuffer(float[] data){

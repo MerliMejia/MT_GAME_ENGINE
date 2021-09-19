@@ -113,17 +113,21 @@ public class Game {
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
 
+        //FYI: The origin(center of the screen) is 0,0,0
+        //OPENGL works on counter clock order.
         float[] vertices = {
           -0.5f, 0.5f, 0f,
           -0.5f, -0.5f, 0f,
           0.5f, -0.5f, 0f,
-
-          0.5f, -0.5f, 0f,
           0.5f, 0.5f, 0f,
-          -0.5f, 0.5f, 0f
         };
 
-        RawModel model = loader.loadToVAO(vertices);
+        int[] indices = {
+                0,1,3,
+                3,1,2
+        };
+
+        RawModel model = loader.loadToVAO(vertices, indices);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
