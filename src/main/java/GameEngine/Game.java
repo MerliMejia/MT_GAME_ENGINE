@@ -1,5 +1,6 @@
 package GameEngine;
 
+import GameEngine.Shaders.StaticShader;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -128,12 +129,15 @@ public class Game {
         };
 
         RawModel model = loader.loadToVAO(vertices, indices);
+        StaticShader shader = new StaticShader();
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
             renderer.prepare();
+            shader.start();
             renderer.render(model);
+            shader.stop();
             glfwSwapBuffers(window); // swap the color buffers
 
             // Poll for window events. The key callback above will only be
@@ -141,6 +145,7 @@ public class Game {
             glfwPollEvents();
         }
 
+        shader.cleanUp();
         loader.cleanUp();
     }
 }
